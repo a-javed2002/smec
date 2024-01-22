@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smec/controllers/authController.dart';
 import 'package:smec/views/Home/home.dart';
+import 'package:smec/views/auth/forget-password.dart';
 import 'package:smec/views/auth/signup.dart';
 import 'package:smec/views/common/loader.dart';
 
@@ -66,8 +67,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         print("Sign-in successful");
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => MyHomeScreen()),
+                          MaterialPageRoute(builder: (context) => Home()),
                         );
                         setState(() {
                           isLoading = false;
@@ -82,6 +82,15 @@ class _SignInScreenState extends State<SignInScreen> {
                     },
                     child: Text('Sign In'),
                   ),
+            SizedBox(height: 10),
+            TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ForgetPasswordScreen()),
+                  );
+                },
+                child: Text("Forget Password?")),
             SizedBox(height: 10),
             TextButton(
               onPressed: _navigateToSignUp,

@@ -1,87 +1,62 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:smec/theme/theme_manager.dart';
+import 'package:smec/views/Home/HomeScreen.dart';
+import 'package:smec/views/auth/profile.dart';
+import 'package:smec/views/auth/setting.dart';
 
-class MyHomeScreen extends StatefulWidget {
-  const MyHomeScreen({Key? key}) : super(key: key);
+class Home extends StatefulWidget {
+  const Home({super.key});
 
   @override
-  _MyHomeScreenState createState() => _MyHomeScreenState();
+  State<Home> createState() => _HomeState();
 }
 
-class _MyHomeScreenState extends State<MyHomeScreen> {
+class _HomeState extends State<Home> with TickerProviderStateMixin {
+  int _currentIndex = 1;
+  final PageController _pageController = PageController(initialPage: 1);
+  late AnimationController _bubbleController;
+  late Animation<double> _bubbleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _bubbleController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 300),
+    );
+    _bubbleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _bubbleController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    _bubbleController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    TextTheme _textTheme = Theme.of(context).textTheme;
-    ThemeManager _themeManager = ThemeManager();
-    bool isDark = Theme.of(context).brightness == Brightness.dark;
+    double deviceWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Theme App"),
-        actions: [
-          Switch(
-              value: _themeManager.themeMode == ThemeMode.dark,
-              onChanged: (newValue) {
-                _themeManager.toggleTheme(newValue);
-              })
-        ],
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+      body: Stack(
+        children: [
+          PageView(
+            controller: _pageController,
+            onPageChanged: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
             children: [
-              Image.asset(
-                "assets/images/profile_pic.png",
-                width: 200,
-                height: 200,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                "Your Name",
-                style: _textTheme.headline4?.copyWith(
-                    color: isDark ? Colors.white : Colors.black,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                "@yourusername",
-                style: _textTheme.subtitle1,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                "This is a simple Status",
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              TextField(),
-              SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(child: Text("Just Click"), onPressed: () {}),
-              SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(child: Text("Click Me"), onPressed: () {}),
+              ProfileScreen(),
+              HomeScreen(),
+              MySettingsScreen(),
             ],
           ),
-        ),
-      ),
-      floatingActionButton: Theme(
-        data: Theme.of(context).copyWith(splashColor: Colors.blue), // For Test
-        child: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {},
-        ),
+        ],
       ),
       bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: Colors.white,
@@ -92,16 +67,15 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
           Icon(Icons.home, color: Colors.white),
           Icon(Icons.settings, color: Colors.white),
         ],
-        // index: _currentIndex, // Use _currentIndex here
-        index: 1, // Use _currentIndex here
+        index: _currentIndex, // Use _currentIndex here
         onTap: (index) {
           setState(() {
-            // _currentIndex = index;
-            // _pageController.animateToPage(
-            //   index,
-            //   duration: Duration(milliseconds: 300),
-            //   curve: Curves.easeInOut,
-            // );
+            _currentIndex = index;
+            _pageController.animateToPage(
+              index,
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
           });
         },
       ),
