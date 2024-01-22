@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "67248834813",
+    "project_id": "smec-9067c",
+    "storage_bucket": "smec-9067c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:67248834813:android:19653a95a054267eee9694",
+        "android_client_info": {
+          "package_name": "com.example.smec"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABhXyUSM_AVeisxQP30Yeqai1ZkPspr0I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
